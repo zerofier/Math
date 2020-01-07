@@ -6,7 +6,12 @@ function common_head() {
 <meta charset="utf-8">
 <title></title>
 <style type="text/css">
+body {
+    font-size: 12px;
+}
+
 p {
+    padding-bottom: .5rem;
     margin-bottom: 2rem;
     border-bottom: dashed 1px #CCC;
 }
@@ -25,7 +30,7 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 	<p>`W_2`は`c xx b`</p>
 	<p>`W_3`は`d xx c`</p>
 	<p>`Y` は`d xx 1`, `T`は`Y`と同じ形</p>
-	<h3>`E=(||Y-T||^2)/2`</h3>
+	<h3>`E=(||Y-T||^2)/2` (誤差函数)</h3>
 	<p>`E=(||W_3 psi_2(W_2 psi_1(W_1 X))-T||^2)/2`</p>
 	<p>`E=(||W_3 psi_2(W_2 psi_1([[sum_(i=1)^a w_(1(1,i)) x_i],[sum_(i=1)^a w_(1(2,i)) x_i],[vdots],[sum_(i=1)^a w_(1(b,i)) x_i]]))-T||^2)/2`</p>
 	
@@ -60,9 +65,9 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 	
 	<p>`(del E)/(del w_(1(1,1)))=sum_(l=1)^d [sum_(k=1)^c w_(3(l,k)) psi_2(sum_(j=1)^b w_(2(k,j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) - t_l] * [sum_(k^'=1)^c w_(3(l,k^')) psi_2(sum_(j=1)^b w_(2(k^',j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i))]^'`</p>
 	
-	<p>`(del E)/(del w_(1(1,1)))=sum_(l=1)^d [sum_(k=1)^c w_(3(l,k)) psi_2(sum_(j=1)^b w_(2(k,j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) - t_l] * [sum_(k^'=1)^c w_(3(l,k^')) psi_2^'(sum_(j=1)^b w_(2(k^',j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) [sum_(j^'=1)^b w_(2(k^',j^')) psi_1(sum_(i^'=1)^b w_(1(j^',i^')) x_(i^'))]^']`</p>
+	<p>`(del E)/(del w_(1(1,1)))=sum_(l=1)^d [sum_(k=1)^c w_(3(l,k)) psi_2(sum_(j=1)^b w_(2(k,j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) - t_l] * [sum_(k^'=1)^c w_(3(l,k^')) psi_2^'(sum_(j=1)^b w_(2(k^',j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) [sum_(j^'=1)^b w_(2(k^',j^')) psi_1(sum_(i^'=1)^b w_(1(j^',i^')) x_(i^'))]^']` (`j^' = 1`以外の項は常数の足し算になるので微分すうと無くなる。)</p>
 	
-	<p>`(del E)/(del w_(1(1,1)))=sum_(l=1)^d [sum_(k=1)^c w_(3(l,k)) psi_2(sum_(j=1)^b w_(2(k,j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) - t_l] * [sum_(k^'=1)^c w_(3(l,k^')) psi_2^'(sum_(j=1)^b w_(2(k^',j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) [w_(2(k^',1)) psi_1^'(sum_(i^'=1)^b w_(1(1,i^')) x_(i^')) [sum_(i^('')=1)^b w_(1(1,i^(''))) x_(i^(''))]^']]`</p>
+	<p>`(del E)/(del w_(1(1,1)))=sum_(l=1)^d [sum_(k=1)^c w_(3(l,k)) psi_2(sum_(j=1)^b w_(2(k,j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) - t_l] * [sum_(k^'=1)^c w_(3(l,k^')) psi_2^'(sum_(j=1)^b w_(2(k^',j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) [w_(2(k^',1)) psi_1^'(sum_(i^'=1)^b w_(1(1,i^')) x_(i^')) [sum_(i^('')=1)^b w_(1(1,i^(''))) x_(i^(''))]^']]` (`i^('') = 1`以外の項は常数の足し算になるので微分すうと無くなる。)</p>
 	
 	<p>`(del E)/(del w_(1(1,1)))=sum_(l=1)^d [sum_(k=1)^c w_(3(l,k)) psi_2(sum_(j=1)^b w_(2(k,j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) - t_l] * [sum_(k^'=1)^c w_(3(l,k^')) psi_2^'(sum_(j=1)^b w_(2(k^',j)) psi_1(sum_(i=1)^b w_(1(j,i)) x_i)) [w_(2(k^',1)) psi_1^'(sum_(i^'=1)^b w_(1(1,i^')) x_(i^')) x_1]]`</p>
 	
@@ -157,17 +162,36 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 		
 	<p>`(del E)/(del W_1) = ([
 		[
-			sum_(l=1)^d [Y-T]_l * ([W_3 psi_2^'(W_2 psi_1(W_1 X)) W_2]_(l,1))
+			sum_(k^'=1)^c ([Y-T]^t W_3)_(1, k^') psi_2^'(W_2 psi_1(W_1 X))_(k^') w_(2(k^',1))
 		],
 		[
-			sum_(l=1)^d [Y-T]_l * ([W_3 psi_2^'(W_2 psi_1(W_1 X)) W_2]_(l,2))
+			sum_(k^'=1)^c ([Y-T]^t W_3)_(1, k^') psi_2^'(W_2 psi_1(W_1 X))_(k^') w_(2(k^',2))
 		],
 		[vdots],
 		[
-			sum_(l=1)^d [Y-T]_l * ([W_3 psi_2^'(W_2 psi_1(W_1 X)) W_2]_(l,b))
+			sum_(k^'=1)^c ([Y-T]^t W_3)_(1, k^') psi_2^'(W_2 psi_1(W_1 X))_(k^') w_(2(k^',b)) 
 		]] @ psi_1^'(W_1 X)) * [[x_1, x_2, cdots, x_a]]`</p>
 		
-	<p>`(del E)/(del W_1) = ([Y-T]^t * W_3 * psi_2^'(W_2 * psi_1(W_1 X)) * W_2)^t @ psi_1^'(W_1 X) * X^t`</p>
+	<p>`(del E)/(del W_1) = ([
+		[
+			([[([Y-T]^t W_3)_(1, 1) * psi_2^'(W_2 psi_1(W_1 X))_1, 
+			   ([Y-T]^t W_3)_(1, 2) * psi_2^'(W_2 psi_1(W_1 X))_2, 
+			   cdots, 
+			   ([Y-T]^t W_3)_(1, c) * psi_2^'(W_2 psi_1(W_1 X))_c]] W_2)_(1,1)
+		],
+		[
+			([[([Y-T]^t W_3)_(1, 1) * psi_2^'(W_2 psi_1(W_1 X))_1, 
+			   ([Y-T]^t W_3)_(1, 2) * psi_2^'(W_2 psi_1(W_1 X))_2, 
+			   cdots, 
+			   ([Y-T]^t W_3)_(1, c) * psi_2^'(W_2 psi_1(W_1 X))_c]] W_2)_(1,2)
+		],
+		[vdots],
+		[
+			([[([Y-T]^t W_3)_(1, 1) * psi_2^'(W_2 psi_1(W_1 X))_1, 
+			   ([Y-T]^t W_3)_(1, 2) * psi_2^'(W_2 psi_1(W_1 X))_2, 
+			   cdots, 
+			   ([Y-T]^t W_3)_(1, c) * psi_2^'(W_2 psi_1(W_1 X))_c]] W_2)_(1,b)
+		]] @ psi_1^'(W_1 X)) * [[x_1, x_2, cdots, x_a]]`</p>
 	
 	<p>`(del E)/(del W_1) = ((([Y-T]^t * W_3)^t @ psi_2^'(W_2 * psi_1(W_1 X)))^t * W_2)^t @ psi_1^'(W_1 X) * X^t` が正しい</p>
 	

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__.'/dispatcher.php';
 
-$call = $dispatcher->find($_SERVER['REQUEST_URI']);
+$call = $dispatcher->find($_SERVER['REDIRECT_URL']);
 
 if ($call != null) {
     $call();

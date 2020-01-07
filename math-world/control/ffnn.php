@@ -45,10 +45,10 @@ cdots +
 	[(del E)/(del w_(1(l,1))), (del E)/(del w_(1(l,2))), cdots, (del E)/(del w_(1(l,n)))]]`</p>
 
 <p>`(del E)/(del w_(1(1,1))) = 
-	[sum_(j=1)^l (w_(2(1,j)) psi(sum_(i=1)^n w_(1(j,i)) x_i) - t_1] w_(2(1,1)) psi'(sum_(i=1)^n w_(1(1,i)) x_i) x_1) + 
-	[sum_(j=1)^l (w_(2(2,j)) psi(sum_(i=1)^n w_(1(j,i)) x_i) - t_2] w_(2(2,1)) psi'(sum_(i=1)^n w_(1(1,i)) x_i) x_1) +
+	[sum_(j=1)^l w_(2(1,j)) psi(sum_(i=1)^n w_(1(j,i)) x_i) - t_1] w_(2(1,1)) psi'(sum_(i=1)^n w_(1(1,i)) x_i) x_1 + 
+	[sum_(j=1)^l w_(2(2,j)) psi(sum_(i=1)^n w_(1(j,i)) x_i) - t_2] w_(2(2,1)) psi'(sum_(i=1)^n w_(1(1,i)) x_i) x_1 +
 	cdots +
-	[sum_(j=1)^l (w_(2(m,j)) psi(sum_(i=1)^n w_(1(j,i)) x_i) - t_m] w_(2(m,1)) psi'(sum_(i=1)^n w_(1(1,i)) x_i) x_1)`</p>
+	[sum_(j=1)^l w_(2(m,j)) psi(sum_(i=1)^n w_(1(j,i)) x_i) - t_m] w_(2(m,1)) psi'(sum_(i=1)^n w_(1(1,i)) x_i) x_1`</p>
 
 <p>`(del E)/(del w_(1(1,1))) = sum_(k=1)^m ([sum_(j=1)^l w_(2(k,j)) psi(sum_(i=1)^n w_(1(j,i)) x_i) - t_k] w_(2(k,1)) psi'(sum_(i=1)^n w_(1(1,i)) x_i) x_1)`</p>
 <p>`(del E)/(del w_(1(1,2))) = sum_(k=1)^m ([sum_(j=1)^l w_(2(k,j)) psi(sum_(i=1)^n w_(1(j,i)) x_i) - t_k] w_(2(k,1)) psi'(sum_(i=1)^n w_(1(1,i)) x_i) x_2)`</p>
