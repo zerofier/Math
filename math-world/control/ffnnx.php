@@ -108,7 +108,7 @@ def forward(x):
 <?php for ($i = 1; $i <= $layer; $i++) {?>
 	p<?php echo $i?> = act<?php echo $i?>(w<?php echo $i?> @ p<?php echo $i - 1?> + b<?php echo $i?>)
 <?php }?>
-	return w<?php echo $layer+1?> @ p<?php echo $layer?>
+	return w<?php echo $layer+1?> @ p<?php echo $layer?> + b<?php echo $layer+1?> 
 
 
 def backward(x, diff):
