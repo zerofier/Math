@@ -13,3 +13,5 @@ require_once __DIR__ . '/sigma.php';
 require_once __DIR__ . '/ffnnx.php';
 
 require_once __DIR__ . '/matrix.php';
+
+require_once __DIR__ . '/bernoulli.php';
