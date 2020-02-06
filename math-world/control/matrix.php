@@ -20,7 +20,7 @@ function aut($nums) {
     return $ret;
 }
 
-function sgn($arr, $org = null) {
+function sigma_cnt($arr, $org = null) {
     $cnt = count($arr);
     $ret = 0;
     if ($org == null) $org = range(1, $cnt);
@@ -28,11 +28,15 @@ function sgn($arr, $org = null) {
         if ($i != array_search($arr[$i], $org)) $ret++;
     }
     
-    return $ret;
+    return ceil($ret / 2.0);
+}
+
+function sigma_sgn($sigma_cnt) {
+    return pow(-1, $sigma_cnt);
 }
 
 function print_aut($item, $key, $cnt) {
-    echo "(".join($item).",".sgn($item).")";
+    echo "(".join($item).",".sigma_sgn(sigma_cnt($item)).")";
     if ($key < $cnt - 1) echo ",";
 }
 

@@ -1,4 +1,6 @@
 <?php
+// 補間?
+
 $dispatcher->route('/math-world/interpolation', function() 
 {
 ?>
