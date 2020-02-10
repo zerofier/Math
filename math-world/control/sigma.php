@@ -1,6 +1,6 @@
 <?php
 $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
-    common_head();
+	common_head();
 ?>
 	<p>`s = a_1(b_1 + b_2 + cdots + b_n) + a_2(b_1 + b_2 + cdots + b_n) + cdots + a_m(b_1 + b_2 + cdots + b_n)`</p>
 	
@@ -15,5 +15,5 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 	<p>`s = sum_(j=1)^m sum_(i=1)^n a_j b_i`</p>
 	
 <?php
-    common_foot();
+	common_foot();
 });
