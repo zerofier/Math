@@ -13,7 +13,7 @@ if ($call != null) {
 <meta charset="utf-8">
 </head><body>
 <ul>
-<?php foreach ($dispatcher->routes as $path =>$callebel) {?>
+<?php foreach ($dispatcher->routes as $path => $callebel) {?>
 	<li><a href="<?php echo $path ?>"><?php echo $path ?></a></li>
 <?php }?>
 </ul>
