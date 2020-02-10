@@ -52,5 +52,8 @@ require_once __DIR__ . '/turing.php';
 require_once __DIR__ . '/arm.php';
 
 require_once __DIR__ . '/arm_clock.php';
+<<<<<<< HEAD
 
 require_once __DIR__ . '/svd.php';
+=======
+>>>>>>> branch 'master' of https://github.com/zerofier/Math.git

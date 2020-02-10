@@ -1,26 +1,4 @@
 <?php
-function common_head() {
-?>
-<!DOCTYPE html>
-<html><head>
-<meta charset="utf-8">
-<title></title>
-<style type="text/css">
-body {
-    font-size: 12px;
-}
-
-p {
-    padding-bottom: .5rem;
-    margin-bottom: 2rem;
-    border-bottom: dashed 1px #CCC;
-}
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=AM_CHTML"></script>
-</head><body>
-<?php
-}
-
 $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
     common_head();
 ?>
@@ -205,9 +183,3 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
     common_foot();
 });
 
-
-function common_foot() {
-?>
-</body></html>
-<?php
-}
