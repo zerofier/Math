@@ -16,12 +16,31 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 }
 </style>
 <script type="text/javascript">
-const l1 = 150;
-const l2 = 150;
-
 var ctx;
 var start = null;
 var points = [];
+
+function point(theta, l1, l2) {
+	let x = Math.cos(theta) * 90.0 + 100.0;
+	let y = Math.sin(theta) * 90.0 + 100.0;
+
+	let cos_beta = -((l1 * l1 + l2 * l2) - (x * x + y * y)) / (2 * l1 * l2);
+	let beta = Math.acos(cos_beta);
+	let sin_beta = Math.sin(beta);
+	let tan_alpha_1 = sin_beta / (l1 / l2 + cos_beta);
+	let sin_alpha_2 = y / Math.sqrt(x * x + y * y);
+	let alpha = Math.atan(tan_alpha_1) + Math.asin(sin_alpha_2);
+	let l1_x = Math.cos(alpha) * l1;
+	let l1_y = Math.sin(alpha) * l1;
+	let l2_x = l1_x + Math.cos(alpha - beta) * l2;
+	let l2_y = l1_y + Math.sin(alpha - beta) * l2;
+
+	ctx.beginPath();
+	ctx.moveTo(0, 0);
+	ctx.lineTo(l1_x, l1_y);
+	ctx.lineTo(l2_x, l2_y);
+	ctx.stroke();
+}
 
 function animation(timestamp) {
 	
@@ -47,35 +66,27 @@ function animation(timestamp) {
 	
 	ctx.restore();
 
+	if (! start) start = Date.now();
+
+	// second pointer
 	ctx.save();
 	ctx.transform(1, 0, 0, -1, 50, 250);
-	// second pointer
-	msg = "";
-	
-	if (! start) start = Date.now();
-	
-	do {
-    	let theta = 2 * Math.PI * (0.5 - ((start + timestamp) / 60000.0));
-    	let x = Math.cos(theta) * 90.0 + 100.0;
-    	let y = Math.sin(theta) * 90.0 + 100.0;
+	let theta = 2 * Math.PI * (0.25 - ((start + timestamp) / 60000.0));
+	point(theta, 150, 150);
+	ctx.restore();
 
-    	let cos_beta = -((l1 * l1 + l2 * l2) - (x * x + y * y)) / (2 * l1 * l2);
-    	let beta = Math.acos(cos_beta);
-    	let sin_beta = Math.sin(beta);
-    	let tan_alpha_1 = sin_beta / (l1 / l2 + cos_beta);
-    	let sin_alpha_2 = y / Math.sqrt(x * x + y * y);
-    	let alpha = Math.atan(tan_alpha_1) + Math.asin(sin_alpha_2);
-    	let l1_x = Math.cos(alpha) * l1;
-    	let l1_y = Math.sin(alpha) * l1;
-    	let l2_x = l1_x + Math.cos(alpha - beta) * l2;
-    	let l2_y = l1_y + Math.sin(alpha - beta) * l2;
+	// minute pointer
+	ctx.save();
+	ctx.transform(-1, 0, 0, -1, 250, 250);
+	theta = 2 * Math.PI * (0.25 + ((start + timestamp) / 3600000.0));
+	point(theta, 150, 150);
+	ctx.restore();
 
-    	ctx.beginPath();
-    	ctx.moveTo(0, 0);
-    	ctx.lineTo(l1_x, l1_y);
-    	ctx.lineTo(l2_x, l2_y);
-    	ctx.stroke();
-	} while (false);
+	// houre pointer
+	ctx.save();
+	ctx.transform(1, 0, 0, 1, 50, 50);
+	theta = 2 * Math.PI * (0.50 + ((start + timestamp) / 43200000.0));
+	point(theta, 150, 150);
 	ctx.restore();
 	
 	window.requestAnimationFrame(animation);
