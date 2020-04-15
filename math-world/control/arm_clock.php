@@ -16,57 +16,33 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 }
 </style>
 <script type="text/javascript">
-let ctx;
-
-function main() {
-	let cvx = document.getElementsByTagName('canvas');
-	if (! cvx) {
-		alert('not found canvas');
-		return;
-	}
-	cvx = cvx[0];
-	ctx = cvx.getContext('2d');
-
-	window.requestAnimationFrame(animation);
-}
-
-
-const l1 = 100;
-const l2 = 100;
-const step = 2000.0;
-
-var target = {
-	'x': 0,
-	'y': 0
-}
-
-var footprint = [];
-
-var last = {
-	'a':  0,
-	'b':  Math.PI / 2,
-	'c1': Math.cos(0),
-	'c2': Math.cos(Math.PI / 2),
-	's1': Math.sin(0),
-	's2': Math.sin(Math.PI / 2),
-	's3': Math.sin(Math.PI / 2)
-};
-
-var current = {
-	'x': last.c1 * l1 + last.c2 * l2,
-	'y': last.s1 * l1 + last.s2 * l2
-};
-var sx = (target.x - current.x) / step;
-var sy = (target.y - current.y) / step;
+var ctx;
 var start = null;
+var points = [];
+
+function point(theta, l1, l2) {
+	let x = Math.cos(theta) * 90.0 + 100.0;
+	let y = Math.sin(theta) * 90.0 + 100.0;
+
+	let cos_beta = -((l1 * l1 + l2 * l2) - (x * x + y * y)) / (2 * l1 * l2);
+	let beta = Math.acos(cos_beta);
+	let sin_beta = Math.sin(beta);
+	let tan_alpha_1 = sin_beta / (l1 / l2 + cos_beta);
+	let sin_alpha_2 = y / Math.sqrt(x * x + y * y);
+	let alpha = Math.atan(tan_alpha_1) + Math.asin(sin_alpha_2);
+	let l1_x = Math.cos(alpha) * l1;
+	let l1_y = Math.sin(alpha) * l1;
+	let l2_x = l1_x + Math.cos(alpha - beta) * l2;
+	let l2_y = l1_y + Math.sin(alpha - beta) * l2;
+
+	ctx.beginPath();
+	ctx.moveTo(0, 0);
+	ctx.lineTo(l1_x, l1_y);
+	ctx.lineTo(l2_x, l2_y);
+	ctx.stroke();
+}
 
 function animation(timestamp) {
-	if (!start) start = timestamp;
-	var progress = timestamp - start;
-	start = timestamp;
-	let s = timestamp % 60;
-	let m = timestamp % 3600;
-	let h = timestamp % 86400;
 	
 	ctx.clearRect(0, 0, 300, 300);
 
@@ -88,51 +64,45 @@ function animation(timestamp) {
 	ctx.arc(0, 0, 100, 0, Math.PI * 2, true);
 	ctx.stroke();
 	
-	
+	ctx.restore();
+
+	if (! start) start = Date.now();
+
 	// second pointer
-	
-	
+	ctx.save();
+	ctx.transform(1, 0, 0, -1, 50, 250);
+	let theta = 2 * Math.PI * (0.25 - ((start + timestamp) / 60000.0));
+	point(theta, 150, 150);
+	ctx.restore();
+
+	// minute pointer
+	ctx.save();
+	ctx.transform(-1, 0, 0, -1, 250, 250);
+	theta = 2 * Math.PI * (0.25 + ((start + timestamp) / 3600000.0));
+	point(theta, 150, 150);
+	ctx.restore();
+
+	// houre pointer
+	ctx.save();
+	ctx.transform(1, 0, 0, 1, 50, 50);
+	theta = 2 * Math.PI * (0.50 + ((start + timestamp) / 43200000.0));
+	point(theta, 150, 150);
 	ctx.restore();
 	
 	window.requestAnimationFrame(animation);
 }
 
 
-
-function arm(a, b) {
-	last.a += a;
-	last.b += b;
-	last.c1 = Math.cos(last.a);
-	last.c2 = Math.cos(last.a + last.b);
-	last.s1 = Math.sin(last.a);
-	last.s2 = Math.sin(last.a + last.b);
-	last.s3 = Math.sin(last.b);
-
-	return [
-		{
-			'x': last.c1 * l1,
-			'y': last.s1 * l1
-		},
-		{
-			'x': last.c1 * l1 + last.c2 * l2,
-			'y': last.s1 * l1 + last.s2 * l2
-		},
-	];
-}
-
-function del(x, y) {
-	if (! last.s3) {
-		return {
-			'a': Math.asin(0.5 / l1),
-			'b': Math.acos((l1 * l1 + l2 * l2 - 2.0) / (2.0 *l1 * l2))
-		};
+function main() {
+	let cvx = document.getElementsByTagName('canvas');
+	if (! cvx) {
+		alert('not found canvas');
+		return;
 	}
-	
-	let c = l1 * l2 * last.s3;
-	return {
-		'a':  (l2 * last.c2 * x + l2 * last.s2 * y) / c,
-		'b':  ((- l1 * last.c1 - l2 * last.c2) * x + (- l1 * last.s1 - l2 * last.s2) * y) / c
-	};
+	cvx = cvx[0];
+	ctx = cvx.getContext('2d');
+
+	window.requestAnimationFrame(animation);
 }
 
 </script>

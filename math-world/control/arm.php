@@ -310,31 +310,62 @@ function del(x, y) {
 	</div>
 	
 	<div>
-		<h2>逆函数</h2>
-		<p>`f(alpha, beta)={(x = l_1 cos alpha + l_2 cos (alpha + beta)), (y = l_1 sin alpha + l_2 sin (alpha + beta)):}` を以下の様に書き換える</p>
-		
-		<p>`{(l_1 cos x + l_2 cos (x + y) = a), (l_1 sin x + l_2 sin (x + y) = b):}` 指針が座標(a,b)を指す場合のアーム角x, yを求める</p>
-		
-		<p>`{(l_1 cos x + l_2 (cos x cos y - sin x sin y) = a), (l_1 sin x + l_2 (sin x cos y + cos x sin y) = b):}`</p>
-		
-		<p>`{(l_1 cos x + l_2 cos x cos y - l_2 sin x sin y = a), (l_1 sin x + l_2 sin x cos y + l_2 cos x sin y = b):}`</p>
-		
-		<p>`{(cos x (l_1 + l_2 cos y) - l_2 sin x sin y = a), (sin x (l_1 + l_2 cos y) + l_2 cos x sin y = b):}`</p>
-		
-		<p>`cos x (l_1 + l_2 cos y) - l_2 sin x sin y + sin x (l_1 + l_2 cos y) + l_2 cos x sin y = a + b`</p>
-		
-		<p>`(cos x + sin x) (l_1 + l_2 cos y) - l_2 sin y (sin x - cos x) = a + b`</p>
-		
-		<p>`l_1 cos x + l_2 cos x cos y - l_2 sin x sin y + l_1 sin x + l_2 sin x cos y + l_2 cos x sin y = a + b`</p>
-		
-		<p>`(cos x + sin x) (l_1 + l_2 cos y) - l_2 sin y (sin x - cos x) = a + b`</p>
-		<!-- 
-		<p>`{( cos x = (a + l_2 sin x sin y)/(l_1 + l_2 cos y)), (l_1 sin x + l_2 sin x cos y + l_2 cos x sin y = b):}`</p>
-		
-		<p>`{( cos x = (a + l_2 sin x sin y)/(l_1 + l_2 cos y)), (l_1 sin x + l_2 sin x cos y + l_2 (a + l_2 sin x sin y)/(l_1 + l_2 cos y) sin y = b):}`</p>
-		 -->
+		<svg version="1.1" width="400" height="300" style="border: solid 1px" >
+			<line x1="80" y1=30 x2="80" y2="270" stroke="black" stroke-width="1" fill="transparent" />
+			<line x1="30" y1=220 x2="370" y2="220" stroke="black" stroke-width="1" fill="transparent" />
+			<circle cx="170" cy="130" r="50" stroke="black" stroke-width="1" fill="transparent" />
+			
+			<line x1="80" y1="220" x2="115" y2="130" stroke="blue"  stroke-width="1" fill="transparent" />
+			<line x1="150" y1="40" x2="115" y2="130" stroke="blue"  stroke-width="1" stroke-dasharray="5,3" fill="transparent" />
+			<circle cx="115" cy="130" r="2" stroke="blue" stroke-width="1" fill="black" />
+			<line x1="115" y1="130" x2="195" y2="87"  stroke="green" stroke-width="1" fill="transparent" />
+			<circle cx="195" cy="87" r="2" stroke="green" stroke-width="1" fill="black" />
+			<line x1="80" y1="220" x2="195" y2="87"  stroke="red"   stroke-width="1" stroke-dasharray="5,3" fill="transparent" />
+			
+			<path d="M">
+		</svg>
 	</div>
+	
+	<div>
+		<h2>円軌道の運動</h2>
+		<p>`{(x = l_1 cos alpha + l_2 cos (alpha - beta)), (y = l_1 sin alpha + l_2 sin (alpha - beta)):}`</p>
+		<p>`{(x = r cos theta + a), (y = r sin theta + b):}`</p>
+		<p>`theta = pi * 120 / t`</p>
+		<p>`t`と`alpha, beta`関係を求める</p>
+		<p>`{(r cos theta + a = l_1 cos alpha + l_2 cos (alpha - beta)), (r sin theta + b = l_1 sin alpha + l_2 sin (alpha - beta)):}`</p>
+		
+		<p>`cos(pi - beta) = (l_1^2 + l_2^2 - (x^2 + y^2)) / (2 l_1 l_2)` (余弦定理)</p>
+		<p>`-cos(beta) = (l_1^2 + l_2^2 - (x^2 + y^2)) / (2 l_1 l_2)`</p>
+		<p>`cos(beta) = ((x^2 + y^2) - (l_1^2 + l_2^2)) / (2 l_1 l_2)`</p>
+		<p>`beta = arccos(((x^2 + y^2) - (l_1^2 + l_2^2)) / (2 l_1 l_2))`</p>
+		
+		<p>`cos(alpha_1) = (l_1^2 + (x^2 + y^2) - l_2^2) / (2 l_1 sqrt(x^2 + y^2))` (余弦定理)</p>
+		<p>`tan(alpha_2) = y/x`</p>
+		<p>`alpha = alpha_1 + alpha_2`</p>
+		<p>`l_2 / sin(alpha_1) = l_1 / sin(beta - alpha_1)` (正弦定理)</p>
+		<p>`sin(beta - alpha_1) / sin(alpha_1) = l_1 / l_2`</p>
+		<p>`(sin(beta)cos(alpha_1) - cos(beta)sin(alpha_1)) / sin(alpha_1) = l_1 / l_2`</p>
+		<p>`sin(beta)cot(alpha_1) - cos(beta) = l_1 / l_2`</p>
+		<p>`sin(beta)cot(alpha_1) = l_1 / l_2 + cos(beta)`</p>
+		<p>`cot(alpha_1) = (l_1 / l_2 + cos(beta)) / sin(beta)`</p>
+		
+		<p>`tan(alpha_1) = sin(beta) / (l_1 / l_2 + cos(beta))`</p>
+		
+		<p>`tan(alpha_2) = y / x`</p>
+		
+		<p>`tan(alpha_1 + alpha_2) = (tan(alpha_1) + tan(alpha_2)) / (1 - tan(alpha_1)tan(alpha_2))`</p>
+		
+		<p>`tan(alpha) = (sin(beta) / (l_1 / l_2 + cos(beta)) + y / x) / (1 - sin(beta) / (l_1 / l_2 + cos(beta)) y / x)`</p>
+		
+		<p>`tan(alpha) = ((sin(beta) x + (l_1 / l_2 + cos(beta)) y) / ((l_1 / l_2 + cos(beta)) x) ) / (1 - (sin(beta) y) / ((l_1 / l_2 + cos(beta)) x))`</p>
+		
+		<p>`tan(alpha) = ((sin(beta) x + (l_1 / l_2 + cos(beta)) y) / ((l_1 / l_2 + cos(beta)) x) ) / ( ((l_1 / l_2 + cos(beta)) x - sin(beta) y) / ((l_1 / l_2 + cos(beta)) x))`</p>
+		
+		<p>`tan(alpha) = ((l_1 / l_2 + cos(beta)) y + sin(beta) x) / ((l_1 / l_2 + cos(beta)) x - sin(beta) y) `</p>
+	</div>
+	
 </div>
+<footer>&nbsp;</footer>
 </body></html>
 <?php
 });
