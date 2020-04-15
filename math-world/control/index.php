@@ -52,3 +52,5 @@ require_once __DIR__ . '/turing.php';
 require_once __DIR__ . '/arm.php';
 
 require_once __DIR__ . '/arm_clock.php';
+
+require_once __DIR__ . '/ballistic.php';
