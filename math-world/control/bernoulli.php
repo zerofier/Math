@@ -60,6 +60,9 @@ table tbody td {
 				</tr>
 			</tbody>
 		</table>
+<?php
+    $golden_ratio = 0.5 + sqrt(5) / 2.0;
+?>
 		<svg width="400" height="300" viewBox="0 0 400 300">
 				<text x="10" y="10">確率</text>
 				<line x1="10" y1="10" x2="10" y2="290" stroke="black" stroke-width="1" />

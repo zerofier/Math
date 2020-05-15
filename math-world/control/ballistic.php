@@ -16,6 +16,16 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 		<div>
 			`f(t_0) = v_0`<br />
 			`f(t_1) = v_0 - v_0^2 * K/(2M) * (t_1 - t_0)`<br />
+			`f(t_2) = v_0 - v_0^2 * K/(2M) * (t_1 - t_0) - (v_0 - v_0^2 * K/(2M) * (t_1 - t_0))^2 * K/(2M) * (t_2 - t_1)`<br />
+			<br />
+			`dt = (t_1 - t_0) = (t_2 - t_0)`<br />
+			`f(t_1) = v_0 - v_0^2 * K/(2M) * dt`<br />
+			`f(t_2) = v_0 - v_0^2 * K/(2M) * dt - (v_0 - v_0^2 * K/(2M) * dt)^2 * K/(2M) * dt`<br />
+			<br />
+			`P = K/(2M) * dt` <br />
+			`f(t_1) = v_0 - v_0^2 * P`<br />
+			`f(t_2) = v_0 - v_0^2 * P - (v_0 - v_0^2 * P)^2 * P`<br />
+			`f(t_3) = v_0 - v_0^2 * P - (v_0 - v_0^2 * P)^2 * P - (v_0 - v_0^2 * P - (v_0 - v_0^2 * P)^2 * P) ^ 2 * P`<br />
 		</div>
 		
 	</div>
@@ -23,7 +33,10 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 	<div>
 	<table><tr><td>
 	<div id="graph">
+		<div id="initial-velocity">&nbsp;</div>
 		<canvas id="graph_canvas" width="810" height="270"></canvas>
+		<br />
+		<div id="last-time" style="display: inline-block; float: right;">&nbsp;</div>
 	</div>
 	</td><td>
 	<div><dl>
@@ -72,6 +85,7 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 
 				m = parseFloat(document.getElementById("m").value);
 				v0 = parseFloat(document.getElementById("v0").value);
+				document.getElementById("initial-velocity").innerHTML = "" + v0 + " m/s";
 				draw();	
 			});
 		};
@@ -79,7 +93,7 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 
 		function draw() {
 			if (! ctx) return;
-			const dt = 0.1;
+			const dt = 0.02;
 			
 			ctx.clearRect(0, 0, mx, my);
 
@@ -98,13 +112,13 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 			ctx.moveTo(0, 0);
 			let v = v0;
 			let t = 0;
-			for (; t < mx / scale; t += dt) {
+			for (; t < (mx / scale) / 10; t += dt) {
 				v = v - (v * v * k * dt) / (m * 2);
-				ctx.lineTo(t * scale, (v0 - v) * scale);
+				ctx.lineTo(t * scale * 10, (v0 - v) * scale);
 			}
 			ctx.stroke();
 
-			console.log("t = " + t + " sec");
+			document.getElementById("last-time").innerHTML = "" + (t/10) + " sec";
 		}
 		</script>
 	</div>
