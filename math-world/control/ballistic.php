@@ -6,28 +6,29 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 		<p>`f`を時間による速度の函数とする `f(t) = V`</p>
 		<p>`f(x)` の微分 `f'(x) = lim_(h->0) (f(x + h) - f(x)) / h`</p>
 		<p>「抗力公式」と「ニュートンの運動方程式」</p>
-		<p>`f'(x) = lim_(h->0) (f(x) - ((f(x))^2 K)/(2 M) * h - f(x)) / h`</p>
-		<p>`f'(x) = lim_(h->0) (cancel(f(x)) - ((f(x))^2 K)/(2 M) * h - cancel(f(x))) / h`</p>
-		<p>`f'(x) = lim_(h->0) (- ((f(x))^2 K)/(2 M) * cancel(h)) / cancel(h)`</p>
-		<p>`f'(x) = - ((f(x))^2 K)/(2 M)`</p>
-		<p>`(dy)/(dx) = - ((f(x))^2 K)/(2 M)`</p>
-		
-		<hr />
-		<div>
-			`f(t_0) = v_0`<br />
-			`f(t_1) = v_0 - v_0^2 * K/(2M) * (t_1 - t_0)`<br />
-			`f(t_2) = v_0 - v_0^2 * K/(2M) * (t_1 - t_0) - (v_0 - v_0^2 * K/(2M) * (t_1 - t_0))^2 * K/(2M) * (t_2 - t_1)`<br />
-			<br />
-			`dt = (t_1 - t_0) = (t_2 - t_0)`<br />
-			`f(t_1) = v_0 - v_0^2 * K/(2M) * dt`<br />
-			`f(t_2) = v_0 - v_0^2 * K/(2M) * dt - (v_0 - v_0^2 * K/(2M) * dt)^2 * K/(2M) * dt`<br />
-			<br />
-			`P = K/(2M) * dt` <br />
-			`f(t_1) = v_0 - v_0^2 * P`<br />
-			`f(t_2) = v_0 - v_0^2 * P - (v_0 - v_0^2 * P)^2 * P`<br />
-			`f(t_3) = v_0 - v_0^2 * P - (v_0 - v_0^2 * P)^2 * P - (v_0 - v_0^2 * P - (v_0 - v_0^2 * P)^2 * P) ^ 2 * P`<br />
+		<p>`f'(x) = lim_(h->0) (f(x) - f^2(x) K/ M * h - f(x)) / h`</p>
+		<p>`f'(x) = lim_(h->0) (cancel(f(x)) - f^2(x)  K/M * h - cancel(f(x))) / h`</p>
+		<p>`f'(x) = lim_(h->0) (- f^2(x) K/M * cancel(h)) / cancel(h)`</p>
+		<p>`f'(x) = - f^2(x) K/M`</p>
+		<p>`dy/dx = - f^2(x) K/M`</p>
+		<p>`int 1/f^2(x) dy/dx dx = int -K/M dx`</p>
+		<p>`int 1/f^2(x) dy = -K/M x + C_1`</p>
+		<p>`- 1/f(x) + C_2 = -K/M x + C_1`</p>
+		<p>`f(x) = 1 / (K/M x + C_2 - C_1)`</p>
+		<p>`f(x) = 1 / (K/M x + C)`</p>
+		<p>`x = 0`</p>
+		<p>`v_0 = 1 / (0 + C)`</p>
+		<p>`C = 1 / v_0`</p>
+		<p>`f(x) = 1 / (K / M x + 1 / v_0)`</p>
+		<div style="display: none">
+    		<p>`d / (dx) 1 / (K / M x + 1 / v_0)` を求める。</p>
+    		<p>`u(x) = K / M x + 1 / v_0`</p>
+    		<p>`d/(du) 1 / u = -1 / (u^2)`</p>
+    		<p>`d/(dx) 1 / (K / M x + 1 / v_0) ＝ d/(du) 1/u (du)/(dx)`</p>
+    		<p>`-1 / (u^2) d/(dx) (K / M x + 1 / v_0)`</p>
+    		<p>`-1 / ((K / M x + 1 / v_0)^2) d/(dx) (K / M x + 1 / v_0)`</p>
+    		<p>`-1 / ((K / M x + 1 / v_0)^2) K / M`</p>
 		</div>
-		
 	</div>
 	<hr />
 	<div>
@@ -93,7 +94,6 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 
 		function draw() {
 			if (! ctx) return;
-			const dt = 0.02;
 			
 			ctx.clearRect(0, 0, mx, my);
 
@@ -107,15 +107,41 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 			else console.log("K = " + k);
 
 			let scale = my / v0;
-			
-			ctx.beginPath();
-			ctx.moveTo(0, 0);
+
 			let v = v0;
 			let t = 0;
+			ctx.beginPath();
+			ctx.moveTo(t * scale * 10, (v0 - v) * scale);
+			dt = 0.01;
 			for (; t < (mx / scale) / 10; t += dt) {
 				v = v - (v * v * k * dt) / (m * 2);
 				ctx.lineTo(t * scale * 10, (v0 - v) * scale);
 			}
+			ctx.strokeStyle = 'black';
+			ctx.stroke();
+/*
+			v = v0;
+			t = 0;
+			ctx.beginPath();
+			ctx.moveTo(t * scale * 10, (v0 - v) * scale);
+			dt = 1;
+			for (; t < (mx / scale) / 10; t += dt) {
+				v = v - (v * v * k * dt) / (m * 2);
+				ctx.lineTo(t * scale * 10, (v0 - v) * scale);
+			}
+			ctx.strokeStyle = 'blue';
+			ctx.stroke();
+*/
+			v = v0;
+			t = 0;
+			ctx.beginPath();
+			ctx.moveTo(t * scale * 10, (v0 - v) * scale);
+			dt = 0.02;
+			for (; t < (mx / scale) / 10; t += dt) {
+				v = 1 / (t * k / m + 1 / v0);
+				ctx.lineTo(t * scale * 10, (v0 - v) * scale); 
+			}
+			ctx.strokeStyle = 'red';
 			ctx.stroke();
 
 			document.getElementById("last-time").innerHTML = "" + (t/10) + " sec";
