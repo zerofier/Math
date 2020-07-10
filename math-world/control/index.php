@@ -57,3 +57,7 @@ require_once __DIR__ . '/svd.php';
 
 require_once __DIR__ . '/ballistic.php';
 
+require_once __DIR__ . '/ballistic_calc.php';
+
+require_once __DIR__ . '/inverse_matrix.php';
+
