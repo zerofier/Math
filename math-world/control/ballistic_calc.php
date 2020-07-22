@@ -57,7 +57,7 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 		<div>`(1 / g) (sqrt g) / (i sqrt p) int 1 / (1 + u^2) du = x + C_1`</div>
 		<div>`-i / (sqrt (gp)) int 1 / (1 + u^2) du = x + C_1`</div>
 		
-		<div>`-i / (sqrt (gp)) (tan^(-1)(u) + C_2) = x + C_1`</div>
+		<div>`-i / (sqrt (gp)) (tan^(-1)(u) + C_2) = x + C_1` (ここで`tan^(-1)(x)`は`tan(x)`の逆関数である。`arctan(x)`と表記することもある。)</div>
 		
 		<div>`-i / (sqrt(gp)) tan^(-1)(u) = x + C_1 + C_2 i / (sqrt(gp))`</div>
 		<div>`-i / (sqrt(gp)) tan^(-1)(u) = x + C`</div>
@@ -87,16 +87,16 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 		
 		<div>初期状態`x=0, y=0`</div>
 		<div>`0 = C`</div>
-		<div>`y = sqrt (g / p) tanh (sqrt(gp) x)`&nbsp;(`g`は重力加速度, `p=P/M`の`M`は質量, `P=1/2 rho S C_D`)</div>
+		<div>`y = sqrt(g/p) tanh(sqrt(g p) x)`&nbsp;(`g`は重力加速度, `p=P/M`の`M`は質量, `P=1/2 rho S C_D`)</div>
 		
-		<div>`int sqrt (g / p) tanh (sqrt(gp) x) dx`</div>
+		<div>`int sqrt(g/p) tanh(sqrt(g p) x) dx`</div>
 		
-		<div>`sqrt (g / p) int tanh (sqrt(gp) x) dx`</div>
-		<div>`u = sqrt(gp) x`</div>
-		<div>`du = sqrt(gp) dx`</div>
+		<div>`sqrt(g/p) int tanh(sqrt(g p) x)dx`</div>
+		<div>`u = sqrt(g p) x`</div>
+		<div>`du = sqrt(g p) dx`</div>
 		<div>代入</div>
-		<div>`sqrt (g / p) 1/sqrt(gp) int tanh (u) du`</div>
-		<div>`1/p int tanh (u) du`</div>
+		<div>`sqrt(g/p) 1/sqrt(g p) int tanh(u) du`</div>
+		<div>`1/p int tanh(u) du`</div>
 		<div>`1/p ln(exp(u) + exp(-u)) ＋ C`</div>
 		<div>逆代入</div>
 		<div>`r = 1/p ln(exp(sqrt(gp) x) + exp(-sqrt(gp) x)) + C`</div>
@@ -106,14 +106,16 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 		<div>`0 = 1/p ln(1 + 1) + C`</div>
 		<div>`C = -1/p ln(2)`</div>
 		
-		<div>`r = 1/p ln(exp(sqrt(gp) x) + exp(-sqrt(gp) x)) - 1/p ln(2)`</div>
+		<div>`r = 1/p ln(exp(sqrt(g p) x) + exp(-sqrt(g p) x)) - 1/p ln(2)`</div>
 		
-		<div>`r = 1/p ln(1/2(exp(sqrt(gp) x) + exp(-sqrt(gp) x)))`</div>
+		<div>`r = 1/p ln(1/2(exp(sqrt(g p) x) + exp(-sqrt(g p) x)))`</div>
 		
-		<div>`r = 1/p ln(cosh(sqrt(gp) x))`</div>
+		<div>`r = 1/p ln(cosh(sqrt(g p) x))`</div>
 	</div>
 	<!--
-	<div>`tanh(x) = (e^x - e^(-x)) / (e^x + e^(-x))`</div>
+	<div>`sinh(x) = (e^x - e^(-x)) / 2)`</div>
+	<div>`cosh(x) = (e^x + e^(-x)) / 2)`</div>
+	<div>`tanh(x) = sinh(x) / cosh(x)`</div>
 	-->
 	
 <?php
