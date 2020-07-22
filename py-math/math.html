@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Title</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        .box {
+            padding-left: 2rem;
+        }
+    </style>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <!-- ASCII-MATH JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=AM_CHTML"></script>
+</head><body>
+    <div class="box">
+        <p>`dy/dx = - p y^2` から</p>
+        <div style="display: none">
+            <p>`int (dy)/cancel(dx) * 1/(p y^2) cancel(dx) = int -1 dx`</p>
+            <p>`int 1 / (p y^2) dy = -x + C_1`</p>
+            <p>`1/p int 1 / y^2 dy = -x + C_1`</p>
+            <p>`1/p -1/y + C_2 = -x + C_1`</p>
+            <p>`-1/(p y) = -x + C`</p>
+            <p>`p y = 1/(x - C)`</p>
+            <p>`y = 1/((x - C) * p)`</p>
+            <p>`x = 0, y = v_0`</p>
+            <p>`v_0 = 1/(-C * p)`</p>
+            <p>`1/(v_0 * p) = -C`</p>
+        </div>
+        <p>`y = 1/(px + 1/v_0)`</p>
+        <p>`int 1 / (px + 1/v_0) dx = log(px + 1/ v_0)/p`</p>
+
+        <p></p>
+        <hr />
+        <p>`{(dy/dx, =, - g - p y^2), (dy/dx, =, - g + p y^2):}` から</p>
+
+        <div style="display: none">
+            <p>`int (dy)/cancel(dx) * 1/(g + p y^2) cancel(dx) = int -1 dx`</p>
+            <p>`int 1/(g + p y^2) dy = -x + C_1`</p>
+            <p>`1/g int 1/(1 + (p y^2) / g) dy = -x + C_1`</p>
+            <p>置換積分</p>
+            <p>`u = sqrt(p / g) y`</p>
+            <p>`du = sqrt(p / g) dy`</p>
+            <p>`dy = sqrt(g / p) du`</p>
+            <p>`1/g int 1/(1 + u^2) sqrt(g/p) du = -x + C_1`</p>
+            <p>`1/sqrt(g p) int 1 / (1 + u^2) du = -x + C_1`</p>
+            <p>`1/sqrt(g p) arctan(u) + C_2 = -x + C_1`</p>
+            <p>`1/sqrt(g p) arctan(sqrt(p / g) y) = -x + C`</p>
+            <p>`arctan(sqrt(p/g)y) = -sqrt(g p) (x - C)`</p>
+            <p>`sqrt(p/g)y = - tan(sqrt(g p) (x - C))`</p>
+            <p>`y = - sqrt(g/p) tan(sqrt(g p) (x - C))`</p>
+            <p>`x = 0, y = v_0`</p>
+            <p>`v_0 = - sqrt(g/p) tan(- sqrt(g p)C)`</p>
+            <p>`- sqrt(p/g) v_0 = tan(- sqrt(g p)C)`</p>
+            <p>`sqrt(p/g) v_0 = tan(sqrt(g p)C)`</p>
+            <p>`arctan(sqrt(p/g) v_0) = sqrt(g p) C`</p>
+            <p>`arctan(sqrt(p/g) v_0) / sqrt(g p) = C`</p>
+            <p>`y = - sqrt(g/p) tan(sqrt(g p) (x - arctan(sqrt(p/g) v_0) / sqrt(g p)))`</p>
+            <p>`y = - sqrt(g/p) tan(sqrt(g p) x - arctan(sqrt(p/g) v_0))`</p>
+            <p>`x >= 0`の範囲が`y >= 0` </p>
+            <p>`- sqrt(g/p) tan(sqrt(g p) x - arctan(sqrt(p/g) v_0)) >= 0`</p>
+            <p>`arctan(sqrt(p/g) v_0) >= sqrt(g p) x`</p>
+            <p>`arctan(sqrt(p/g) v_0) / sqrt(g p) >= x`</p>
+            <p>`x`の範囲は`0 >= x >= arctan(sqrt(p/g) v_0) / sqrt(g p)`</p>
+        </div>
+        <p>`y = - sqrt(g/p) tan(sqrt(g p) x - arctan(sqrt(p/g) v_0))`</p>
+
+        <p>`h = int - sqrt(g/p) tan(sqrt(g p) x - arctan(sqrt(p/g) v_0)) dx`で時間と高度の関数を求める</p>
+        <div style="display: none">
+            <p>`- sqrt(g/p) int tan(sqrt(g p) x - arctan(sqrt(p/g) v_0)) dx`</p>
+            <p>`u = sqrt(g p) x - arctan(sqrt(p/g) v_0)`</p>
+            <p>`du = sqrt(g p) dx`</p>
+            <p>置換</p>
+            <p>`- sqrt(g/p) int tan(u) du/sqrt(g p)`</p>
+            <p>`- 1/p int tan(u) du`</p>
+            <p>`1/p log(cos(u)) + C`</p>
+            <p>`h = 1/p log(cos(sqrt(g p) x - arctan(sqrt(p/g) v_0))) + C`</p>
+            <p>`cos(sqrt(g p) x - arctan(sqrt(p/g) v_0)) = cos(sqrt(g p) x)1/sqrt(p/g v_0^2 + 1) + sin(sqrt(g p) x)(arctan(sqrt(p/g) v_0))/sqrt(p/g v_0^2 + 1)`</p>
+            <p>`= (cos(sqrt(g p) x) + sin(sqrt(g p) x)(sqrt(p/g) v_0))/sqrt(p/g v_0^2 + 1)`</p>
+            <p>`h = 1/p log((cos(sqrt(g p) x) + sin(sqrt(g p) x)(sqrt(p/g) v_0))/sqrt(p/g v_0^2 + 1)) + C`</p>
+            <p>`h = 1/p (log(cos(sqrt(g p) x) + sin(sqrt(g p) x)(sqrt(p/g) v_0)) - log(sqrt(p/g v_0^2 + 1))) + C`</p>
+            <p>`h = 1/p (log(cos(sqrt(g p) x) + sqrt(p/g) v_0 sin(sqrt(g p) x)) + 1/2 log(p/g v_0^2 + 1)) + C`</p>
+            <p>`x = 0, h = 0`</p>
+            <p>`0 = 1/p (log(1 + 0) + 1/2 log(p/g v_0^2 + 1)) + C`</p>
+            <p>`0 = 1/p (0 + 1/2 log(p/g v_0^2 + 1)) + C`</p>
+            <p>`C = - 1/p (0 + 1/2 log(p/g v_0^2 + 1))`</p>
+            <p>`h = 1/p (log(cos(sqrt(g p) x) + sqrt(p/g) v_0 sin(sqrt(g p) x)) + 1/2 log(p/g v_0^2 + 1)) - 1/p 1/2 log(p/g v_0^2 + 1)`</p>
+            <p>`h = 1/p log(cos(sqrt(g p) x) + sqrt(p/g) v_0 sin(sqrt(g p) x)) `</p>
+        </div>
+
+
+        <p>&nbsp;</p>
+    </div>
+</body></html>
