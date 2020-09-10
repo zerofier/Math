@@ -119,10 +119,7 @@ $dispatcher->route('/math-world/'.basename(__FILE__, '.php'), function() {
 		
 		<div>初期状態`x=0, y=0`</div>
 		<div>`0 = C`</div>
-		<div>`y = sqrt(g / p) tanh(sqrt(gp) x)`&nbsp;(`g`は重力加速度, `p=P/M`の`M`は質量, `P=1/2 rho S C_D`)</div>
-		
-		 -->
-		<div>`g/p = sqrt(g / p) tanh (sqrt(gp) x)`</div>
+		<div>`y = sqrt(g/p) tanh(sqrt(g p) x)`&nbsp;(`g`は重力加速度, `p=P/M`の`M`は質量, `P=1/2 rho S C_D`)</div>
 		
 		<div>`g/p sqrt(p) / sqrt(g) = tanh (sqrt(gp) x)`</div>
 		
