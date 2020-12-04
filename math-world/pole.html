@@ -95,7 +95,7 @@ function init() {
 	// options
 	document.getElementById("speed").value = speed;
 	document.getElementById("sunrise").value = sunrise;
-	document.getElementById("sundown").value = sundown
+	document.getElementById("sundown").value = sundown;
 	
 	step();
 }
@@ -120,7 +120,7 @@ function reset() {
 		return;
 	}
 	
-	let intSundows = parseFloat(document.getElementById("sundows").value);
+	let intSundown = parseFloat(document.getElementById("sundown").value);
 	if (isNaN(floatSpeed)) {
 		alert("the Sundows is invalid value.");
 		return;
@@ -130,7 +130,7 @@ function reset() {
 	document.cookie = "compass_time=" + Date.now();
 	document.cookie = "speed=" + floatSpeed;
 	document.cookie = "sunrise=" + intSunrise;
-	document.cookie = "sundows=" + intSundows;
+	document.cookie = "sundown=" + intSundown;
 	location.reload();
 }
 
