@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pole Watch</title>
+<style type="text/css">
+body {
+	background-color: #181818;
+	color: #ddd;
+}
+
+.label {
+	display: inline-block;
+	width: 5em;
+	text-align: left;
+}
+</style>
+<script type="text/javascript">
+const HALF_PI = Math.PI * 0.5;
+
+var can;
+var ctx;
+var w, h;
+var cx, cy;
+var startPoint = 0;
+var speed = 6.2;
+var sunrise = 100;
+var sundown = 300;
+
+var drawItems = [];
+var drawTexts = [];
+
+function init() {
+	can = document.getElementById("view");
+	ctx = can.getContext("2d");
+	w = can.clientWidth;
+	h = can.clientHeight;
+	cx = w * 0.5;
+	cy = h * 0.5;
+	cr = 110;
+	
+	let angle = 180;
+	for (let a = 0; a < 2 * Math.PI; a += Math.PI * 0.16666667) {
+		drawItems.push([
+			{
+				"type": "m",
+				"x": cx + Math.cos(-a + HALF_PI) * 100.0,
+				"y": cy + Math.sin(-a + HALF_PI) * 100.0
+			},
+			{
+				"type": "l",
+				"x": cx + Math.cos(-a + HALF_PI) * cr,
+				"y": cy + Math.sin(-a + HALF_PI) * cr
+			}
+		]);
+		
+		drawTexts.push({
+			"type": "t",
+			"text": (angle + 360) % 360,
+			"x": cx + Math.cos(-a + HALF_PI) * 85.0,
+			"y": cy + Math.sin(-a + HALF_PI) * 85.0
+		});
+		angle -= 30;
+	}
+	
+	let items = document.cookie.split(";");
+	let compass_time;
+	
+	items.forEach(function(item) {
+		let values = item.split("=");
+		switch(values[0].trim()) {
+		case "compass_point":
+			document.getElementById("compass_point").value = values[1];
+			break;
+		case "compass_time":
+			compass_time = parseInt(values[1]);
+			break;
+		case "speed":
+			speed = parseFloat(values[1]);
+			break;
+		case "sunrise":
+			sunrise = parseInt(values[1]);
+			break;
+		case "sundown":
+			sundown = parseInt(values[1]);
+			break;
+		}
+	});
+	
+	let compassPoint = parseFloat(document.getElementById("compass_point").value);
+	startPoint = -(compassPoint / 180.0 + (Date.now() - compass_time) * speed / 43200000.0) * Math.PI;
+	
+	let d = new Date(compass_time);
+	document.getElementById("rest_time").innerHTML = "Sinse " + d.toJSON();
+	// options
+	document.getElementById("speed").value = speed;
+	document.getElementById("sunrise").value = sunrise;
+	document.getElementById("sundown").value = sundown
+	
+	step();
+}
+
+function reset() {
+	let compassPoint = parseInt(document.getElementById("compass_point").value);
+	if (isNaN(compassPoint)) {
+		alert("Pless enter the compass point of the sun.");
+		return;
+	}
+	compassPoint %= 360;
+	
+	let floatSpeed = parseFloat(document.getElementById("speed").value);
+	if (isNaN(floatSpeed)) {
+		alert("the Speed is invalid value.");
+		return;
+	}
+	
+	let intSunrise = parseFloat(document.getElementById("sunrise").value);
+	if (isNaN(floatSpeed)) {
+		alert("the Sunrise is invalid value.");
+		return;
+	}
+	
+	let intSundows = parseFloat(document.getElementById("sundows").value);
+	if (isNaN(floatSpeed)) {
+		alert("the Sundows is invalid value.");
+		return;
+	}
+	
+	document.cookie = "compass_point=" + compassPoint;
+	document.cookie = "compass_time=" + Date.now();
+	document.cookie = "speed=" + floatSpeed;
+	document.cookie = "sunrise=" + intSunrise;
+	document.cookie = "sundows=" + intSundows;
+	location.reload();
+}
+
+function draw(angle) {
+	ctx.clearRect(0, 0, w, h);
+	ctx.strokeStyle = "#ddd";
+	ctx.fillStyle = "#ddd";
+	ctx.strokeStyle = "#ddd";
+	ctx.lineWidth = 3;
+	ctx.font = "1em blod";
+	ctx.lineCap = "round";
+	
+	ctx.beginPath();
+	ctx.ellipse(cx, cy, cr, cr, 0, 0, 2 * Math.PI);
+	ctx.stroke();
+	
+	drawItems.forEach(function (shape) {
+		ctx.beginPath();
+		shape.forEach(function (item) {
+			switch(item.type) {
+			case "m":
+				ctx.moveTo(item.x, item.y);
+				break;
+			case "l":
+				ctx.lineTo(item.x, item.y);
+				break;
+			}
+		});
+		ctx.stroke();
+	});
+	
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+	drawTexts.forEach(function (text) {
+		ctx.fillText(text.text, text.x, text.y);
+	});
+	
+	
+	angle += startPoint;
+	
+	ctx.beginPath();
+	ctx.moveTo(cx, cy);
+	ctx.lineTo(cx + Math.cos(angle + HALF_PI) * 60.0, cy - Math.sin(angle + HALF_PI) * 60.0);
+	ctx.stroke();
+}
+
+function step(timestamp) {
+	let angle = - Math.PI * (timestamp % 86400000) * speed / 43200000.0;
+	draw(angle);
+	window.requestAnimationFrame(step);
+}
+
+</script>
+</head><body onload="init()">
+<div style="text-align: center;">
+<div style="display: inline-block; text-align: left;">
+	<div>
+		<canvas width="300" height="300" id="view" style="border: solid 1px #ddd;"></canvas>
+	</div>
+	<div>Input the compass point (0 ~ 379)</div>
+	<div>
+		<input type="text" id="compass_point" />
+		<button type="button" onclick="reset()">RESET</button>
+	</div>
+	<div>
+		<div id="rest_time"></div>
+	</div>
+	<h3>Options</h3>
+	<div><div class="label">Speed: </div><input type="text" id="speed" /></div>
+	<div><div class="label">Sunrise: </div><input type="text" id="sunrise" /></div>
+	<div><div class="label">Sundown: </div><input type="text" id="sundown" /></div>
+</div></div>
+</body></html>
