@@ -11,21 +11,31 @@ body {
 
 .label {
 	display: inline-block;
-	width: 5em;
+	width: 8em;
 	text-align: left;
 }
 </style>
 <script type="text/javascript">
 const HALF_PI = Math.PI * 0.5;
+const SECS_24 = 86400000;
+const SECS_19 = 19 * 3600000;
+const SECS_06 =  6 * 3600000;
+const SECS_DY = SECS_19 - SECS_06;
+const SECS_NT = 86400000 - SECS_DY;
 
 var can;
 var ctx;
 var w, h;
 var cx, cy;
 var startPoint = 0;
-var speed = 6.2;
+var compass_time = 0;
+var current = 0;
+var night_speed = 1.7;
+var day_speed = 6.2;
 var sunrise = 100;
 var sundown = 300;
+var last_hour = 0;
+var last_minute = 0;
 
 var drawItems = [];
 var drawTexts = [];
@@ -63,19 +73,43 @@ function init() {
 		angle -= 30;
 	}
 	
+	let hourElem = document.getElementById("hour");
+	let minuteElem = document.getElementById("minute");
+	hourElem.innerHTML = "";
+	for (let h = 0; h < 24; h++) {
+		let opt = document.createElement("option");
+		opt.innerHTML = ("00" + h).slice(-2);
+		opt.setAttribute("value", h);
+		hourElem.appendChild(opt);
+	}
+	
+	for (let m = 0; m < 60; m++) {
+		let opt = document.createElement("option");
+		opt.innerHTML = ("00" + m).slice(-2);
+		opt.setAttribute("value", m);
+		minuteElem.appendChild(opt);
+	}
+	
 	let items = document.cookie.split(";");
-	let compass_time;
+	let hour = 0;
+	let minute = 0;
 	
 	items.forEach(function(item) {
 		let values = item.split("=");
 		switch(values[0].trim()) {
-		case "compass_point":
-			document.getElementById("compass_point").value = values[1];
+		case "hour":
+			hour = parseInt(values[1]);
+			break;
+		case "minute":
+			minute = parseInt(values[1]);
 			break;
 		case "compass_time":
 			compass_time = parseInt(values[1]);
 			break;
-		case "speed":
+		case "night_speed":
+			speed = parseFloat(values[1]);
+			break;
+		case "day_speed":
 			speed = parseFloat(values[1]);
 			break;
 		case "sunrise":
@@ -87,13 +121,13 @@ function init() {
 		}
 	});
 	
-	let compassPoint = parseFloat(document.getElementById("compass_point").value);
-	startPoint = -(compassPoint / 180.0 + (Date.now() - compass_time) * speed / 43200000.0) * Math.PI;
+	current = (hour * 60 + minute) * 60000;
 	
 	let d = new Date(compass_time);
 	document.getElementById("rest_time").innerHTML = "Sinse " + d.toJSON();
 	// options
-	document.getElementById("speed").value = speed;
+	document.getElementById("night_speed").value = night_speed;
+	document.getElementById("day_speed").value = day_speed;
 	document.getElementById("sunrise").value = sunrise;
 	document.getElementById("sundown").value = sundown;
 	
@@ -101,34 +135,38 @@ function init() {
 }
 
 function reset() {
-	let compassPoint = parseInt(document.getElementById("compass_point").value);
-	if (isNaN(compassPoint)) {
-		alert("Pless enter the compass point of the sun.");
+	let hour = parseInt(document.getElementById("hour").value);
+	let minue = parseInt(document.getElementById("minute").value);
+	
+	let floatNightSpeed = parseFloat(document.getElementById("night_speed").value);
+	if (isNaN(floatNightSpeed)) {
+		alert("the Night Speed is invalid value.");
 		return;
 	}
-	compassPoint %= 360;
 	
-	let floatSpeed = parseFloat(document.getElementById("speed").value);
-	if (isNaN(floatSpeed)) {
-		alert("the Speed is invalid value.");
+	let floatDaySpeed = parseFloat(document.getElementById("day_speed").value);
+	if (isNaN(floatDaySpeed)) {
+		alert("the Day Speed is invalid value.");
 		return;
 	}
 	
 	let intSunrise = parseFloat(document.getElementById("sunrise").value);
-	if (isNaN(floatSpeed)) {
+	if (isNaN(intSunrise)) {
 		alert("the Sunrise is invalid value.");
 		return;
 	}
 	
 	let intSundown = parseFloat(document.getElementById("sundown").value);
-	if (isNaN(floatSpeed)) {
+	if (isNaN(intSundown)) {
 		alert("the Sundows is invalid value.");
 		return;
 	}
 	
-	document.cookie = "compass_point=" + compassPoint;
+	document.cookie = "hour=" + hour;
+	document.cookie = "minue=" + minue;
 	document.cookie = "compass_time=" + Date.now();
-	document.cookie = "speed=" + floatSpeed;
+	document.cookie = "night_speed=" + floatNightSpeed;
+	document.cookie = "day_speed=" + floatDaySpeed;
 	document.cookie = "sunrise=" + intSunrise;
 	document.cookie = "sundown=" + intSundown;
 	location.reload();
@@ -178,7 +216,58 @@ function draw(angle) {
 }
 
 function step(timestamp) {
-	let angle = - Math.PI * (timestamp % 86400000) * speed / 43200000.0;
+	let oneDay = SECS_NT / night_speed + SECS_DY / day_speed;
+	let defTime = Date.now() - compass_time;
+	let elapsed = defTime;
+	while (elapsed > oneDay) { elapsed -= oneDay; }
+	while (elapsed > 0) {
+		if (SECS_06 <= current && current < SECS_19) {
+			// day
+			if (elapsed >= (SECS_19 - current) / day_speed) {
+				elapsed -= (SECS_19 - current) / day_speed;
+				current = SECS_19;
+			} else {
+				current += elapsed * day_speed;
+				elapsed = 0;
+			}
+		} else {
+			// night
+			if (current >= SECS_19) {
+				if (elapsed >= (SECS_24 - current) / night_speed) {
+					elapsed -= (SECS_24 - current) / night_speed;
+					current = 0;
+				} else {
+					current += parseInt(elapsed * night_speed);
+					elapsed = 0;
+				}
+			} else {
+				if (elapsed >= (SECS_06 - current) / night_speed) {
+					elapsed -= (SECS_06 - current) / night_speed;
+					current = SECS_06;
+				} else {
+					current += parseInt(elapsed * night_speed);
+					elapsed = 0;
+				}
+			}
+		}
+		
+		current %= 86400000;
+	}
+	
+	let minute = parseInt(current / 60000); 
+	let hour = parseInt(minute / 60); 
+	minute %= 60;
+	
+	if (last_minute != minute) {
+		document.getElementById("minute").value = last_minute = minute;
+	}
+	if (last_hour != hour) {
+		document.getElementById("hour").value = last_hour = hour;
+	}
+	
+	compass_time += defTime;
+
+	let angle = - Math.PI * current / 43200000.0;
 	draw(angle);
 	window.requestAnimationFrame(step);
 }
@@ -192,15 +281,19 @@ function step(timestamp) {
 	</div>
 	<div>Input the compass point (0 ~ 379)</div>
 	<div>
+		<!--
 		<input type="text" id="compass_point" />
+		-->
+		<select id="hour"></select><span>:</span><select id="minute"></select>
 		<button type="button" onclick="reset()">RESET</button>
 	</div>
 	<div>
 		<div id="rest_time"></div>
 	</div>
 	<h3>Options</h3>
-	<div><div class="label">Speed: </div><input type="text" id="speed" /></div>
-	<div><div class="label">Sunrise: </div><input type="text" id="sunrise" /></div>
-	<div><div class="label">Sundown: </div><input type="text" id="sundown" /></div>
+	<div><div class="label">Night Speed: </div><input type="text" id="night_speed" /></div>
+	<div><div class="label">Day Speed:   </div><input type="text" id="day_speed" /></div>
+	<div><div class="label">Sunrise:     </div><input type="text" id="sunrise" /></div>
+	<div><div class="label">Sundown:     </div><input type="text" id="sundown" /></div>
 </div></div>
 </body></html>
