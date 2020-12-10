@@ -162,13 +162,13 @@ function reset() {
 		return;
 	}
 	
-	document.cookie = "hour=" + hour;
-	document.cookie = "minue=" + minue;
-	document.cookie = "compass_time=" + Date.now();
-	document.cookie = "night_speed=" + floatNightSpeed;
-	document.cookie = "day_speed=" + floatDaySpeed;
-	document.cookie = "sunrise=" + intSunrise;
-	document.cookie = "sundown=" + intSundown;
+	document.cookie = "hour=" + hour + "; max-age=" + (7*86400);
+	document.cookie = "minue=" + minue + "; max-age=" + (7*86400);
+	document.cookie = "compass_time=" + Date.now() + "; max-age=" + (7*86400);
+	document.cookie = "night_speed=" + floatNightSpeed + "; max-age=" + (7*86400);
+	document.cookie = "day_speed=" + floatDaySpeed + "; max-age=" + (7*86400);
+	document.cookie = "sunrise=" + intSunrise + "; max-age=" + (7*86400);
+	document.cookie = "sundown=" + intSundown + "; max-age=" + (7*86400);
 	location.reload();
 }
 
