@@ -136,7 +136,7 @@ function init() {
 
 function reset() {
 	let hour = parseInt(document.getElementById("hour").value);
-	let minue = parseInt(document.getElementById("minute").value);
+	let minute = parseInt(document.getElementById("minute").value);
 	
 	let floatNightSpeed = parseFloat(document.getElementById("night_speed").value);
 	if (isNaN(floatNightSpeed)) {
@@ -163,7 +163,7 @@ function reset() {
 	}
 	
 	document.cookie = "hour=" + hour + "; max-age=" + (7*86400);
-	document.cookie = "minue=" + minue + "; max-age=" + (7*86400);
+	document.cookie = "minute=" + minute + "; max-age=" + (7*86400);
 	document.cookie = "compass_time=" + Date.now() + "; max-age=" + (7*86400);
 	document.cookie = "night_speed=" + floatNightSpeed + "; max-age=" + (7*86400);
 	document.cookie = "day_speed=" + floatDaySpeed + "; max-age=" + (7*86400);
