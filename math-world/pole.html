@@ -216,7 +216,8 @@ function draw(angle) {
 }
 
 function step(timestamp) {
-	let oneDay = SECS_NT / (night_speed + day_speed) + SECS_DY / day_speed;
+	let nSpeed = night_speed * day_speed;
+	let oneDay = SECS_NT / nSpeed + SECS_DY / day_speed;
 	let defTime = Date.now() - compass_time;
 	let elapsed = defTime;
 	while (elapsed > oneDay) { elapsed -= oneDay; }
@@ -233,19 +234,19 @@ function step(timestamp) {
 		} else {
 			// night
 			if (current >= SECS_19) {
-				if (elapsed >= (SECS_24 - current) / (night_speed + day_speed)) {
-					elapsed -= (SECS_24 - current) / (night_speed + day_speed);
+				if (elapsed >= (SECS_24 - current) / nSpeed) {
+					elapsed -= (SECS_24 - current) / nSpeed;
 					current = 0;
 				} else {
-					current += parseInt(elapsed * (night_speed + day_speed));
+					current += parseInt(elapsed * nSpeed);
 					elapsed = 0;
 				}
 			} else {
-				if (elapsed >= (SECS_06 - current) / (night_speed + day_speed)) {
-					elapsed -= (SECS_06 - current) / (night_speed + day_speed);
+				if (elapsed >= (SECS_06 - current) / nSpeed) {
+					elapsed -= (SECS_06 - current) / nSpeed;
 					current = SECS_06;
 				} else {
-					current += parseInt(elapsed * (night_speed + day_speed));
+					current += parseInt(elapsed * nSpeed);
 					elapsed = 0;
 				}
 			}
