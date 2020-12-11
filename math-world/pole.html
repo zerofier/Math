@@ -23,6 +23,7 @@ const SECS_06 =  6 * 3600000;
 const SECS_DY = SECS_19 - SECS_06;
 const SECS_NT = 86400000 - SECS_DY;
 
+var storage;
 var can;
 var ctx;
 var w, h;
@@ -41,6 +42,7 @@ var drawItems = [];
 var drawTexts = [];
 
 function init() {
+	storage = window["localStorage"];
 	can = document.getElementById("view");
 	ctx = can.getContext("2d");
 	w = can.clientWidth;
@@ -90,36 +92,14 @@ function init() {
 		minuteElem.appendChild(opt);
 	}
 	
-	let items = document.cookie.split(";");
-	let hour = 0;
-	let minute = 0;
+	let hour = parseInt(storage.getItem("hour") || 0);
+	let minute = parseInt(storage.getItem("minute") || 0);
 	
-	items.forEach(function(item) {
-		let values = item.split("=");
-		switch(values[0].trim()) {
-		case "hour":
-			hour = parseInt(values[1]);
-			break;
-		case "minute":
-			minute = parseInt(values[1]);
-			break;
-		case "compass_time":
-			compass_time = parseInt(values[1]);
-			break;
-		case "night_speed":
-			night_speed = parseFloat(values[1]);
-			break;
-		case "day_speed":
-			day_speed = parseFloat(values[1]);
-			break;
-		case "sunrise":
-			sunrise = parseInt(values[1]);
-			break;
-		case "sundown":
-			sundown = parseInt(values[1]);
-			break;
-		}
-	});
+	compass_time = parseInt(storage.getItem("compass_time") || compass_time);
+	night_speed = parseFloat(storage.getItem("night_speed") || night_speed);
+	day_speed = parseFloat(storage.getItem("day_speed") || day_speed);
+	sunrise = parseInt(storage.getItem("sunrise") || sunrise);
+	sundown = parseInt(storage.getItem("sundown") || sundown);
 	
 	current = (hour * 60 + minute) * 60000;
 	
@@ -162,13 +142,13 @@ function reset() {
 		return;
 	}
 	
-	document.cookie = "hour=" + hour + "; max-age=" + (7*86400);
-	document.cookie = "minute=" + minute + "; max-age=" + (7*86400);
-	document.cookie = "compass_time=" + Date.now() + "; max-age=" + (7*86400);
-	document.cookie = "night_speed=" + floatNightSpeed + "; max-age=" + (7*86400);
-	document.cookie = "day_speed=" + floatDaySpeed + "; max-age=" + (7*86400);
-	document.cookie = "sunrise=" + intSunrise + "; max-age=" + (7*86400);
-	document.cookie = "sundown=" + intSundown + "; max-age=" + (7*86400);
+	storage.setItem("hour", hour);
+	storage.setItem("minute", minute);
+	storage.setItem("compass_time", Date.now());
+	storage.setItem("night_speed", floatNightSpeed);
+	storage.setItem("day_speed", floatDaySpeed);
+	storage.setItem("sunrise", intSunrise);
+	storage.setItem("sundown", intSundown);
 	location.reload();
 }
 
